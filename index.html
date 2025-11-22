@@ -26,7 +26,7 @@
         request.onload = function () {
           console.log(JSON.parse(this.responseText));
           const data = JSON.parse(this.responseText);
-          setCountry(data[0]);
+          setCountry(data);
 
           console.log(data[0].borders.toString());
           const countries = data[0].borders.toString();
@@ -46,31 +46,32 @@
 
       function setCountry(data) {
         for (let country of data) {
-          console.log(country);
-        }
-        const html = `<div class="card col-3 ms-3 me-3" style="width: 18rem;">
-                <img src="${data.flags.png}" class="card-img-top" alt="...">
+          const html = `<div class="card col-3 m-3" style="width: 18rem;">
+                <img src="${country.flags.png}" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <h3 class="card-title text-center">${data.name.common}</h3>
+                    <h3 class="card-title text-center">${
+                      country.name.common
+                    }</h3>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><b>Population</b> : ${(
-                          data.population / 1000000
+                          country.population / 1000000
                         ).toFixed(1)}</li>
                         <li class="list-group-item"><b>Capital</b> : ${
-                          data.capital[0]
+                          country.capital[0]
                         }</li>
                         <li class="list-group-item"><b>Languages</b> : ${Object.values(
-                          data.languages
+                          country.languages
                         )}</li>
                     </ul>
                 </div>
                 </div>`;
-        document
-          .querySelector(".container .row")
-          .insertAdjacentHTML("beforeend", html);
+          document
+            .querySelector(".container .row")
+            .insertAdjacentHTML("beforeend", html);
+        }
       }
 
-      displayCountry("turkey");
+      displayCountry("france");
     </script>
   </body>
 </html>
