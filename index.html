@@ -9,19 +9,53 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
-    <title>API</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Border Of Country</title>
   </head>
-  <body>
-    <div class="container mt-3">
-      <div class="row"></div>
+  <body class="bg-dark">
+    <div class="container mt-3 border rounded">
+      <nav class="navbar bg-dark border-bottom border-body mb-3"  style="background-color: #e3f2fd;" data-bs-theme="light">
+      <div class="container-fluid d-flex align-items-center justify-content-center">
+        <a class="navbar-brand" >Country</a>
+        <form class="d-flex flex-grow-1" role="search">
+          <input class="form-control " type="search" placeholder='Please write the name of the country you are curious about :)' aria-label="Search"/>
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+      <div class="card">
+        <div class="card-header bg-dark">
+          The country you wrote.
+        </div>
+        <div class="card-body" id="select-country">
+          
+        </div>
+      </div>
+      <div class="card mt-3 mb-3">
+        <div class="card-header bg-dark">
+          Border Countries.
+        </div>
+        <div class="card-body">
+          <div class="row row-cols-6 g-2"  id="border-country"></div>
+        </div>
+      </div>
+      
     </div>
 
     <script>
+      const btn = document.querySelector("button");
+      
+
+      btn.addEventListener("click", () => {
+        const value = document.querySelector("input").value;
+        displayCountry(value);})
+
       function displayCountry(country) {
         const request = new XMLHttpRequest();
 
         request.open("GET", "https://restcountries.com/v3.1/name/" + country);
         request.send();
+
 
         request.onload = function () {
           console.log(JSON.parse(this.responseText));
@@ -39,39 +73,63 @@
           req.onload = function () {
             const data = JSON.parse(this.responseText);
             console.log(data);
-            setCountry(data);
+            borderCountry(data);
           };
         };
       }
 
       function setCountry(data) {
+        document.querySelector("#select-country").innerHTML = "";
         for (let country of data) {
-          const html = `<div class="card col-3 m-3" style="width: 18rem;">
-                <img src="${country.flags.png}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h3 class="card-title text-center">${
-                      country.name.common
-                    }</h3>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><b>Population</b> : ${(
-                          country.population / 1000000
-                        ).toFixed(1)}</li>
-                        <li class="list-group-item"><b>Capital</b> : ${
-                          country.capital[0]
-                        }</li>
-                        <li class="list-group-item"><b>Languages</b> : ${Object.values(
-                          country.languages
-                        )}</li>
-                    </ul>
-                </div>
-                </div>`;
-          document
-            .querySelector(".container .row")
+          const html = `<div class="row">
+            <div class="col-4">
+              <img src="${country.flags.png}" alt="" class="img-fluid rounded border">
+            </div>
+            <div class="col-8">
+              <h3 class="card-title fw-bold">${country.name.common}</h3>
+              <hr>
+              <div class="row">
+                <div class="col-2 fw-bold">Population: </div>
+                <div class="col-10">${(country.population / 1000000).toFixed(1)} Milyon</div>
+              </div>
+              <div class="row">
+                <div class="col-2 fw-bold">Capital: </div>
+                <div class="col-10">${country.capital[0]}</div>
+              </div>
+              <div class="row">
+                <div class="col-2 fw-bold">Language: </div>
+                <div class="col-10">${Object.values(country.languages)}</div>
+              </div>
+              <div class="row">
+                <div class="col-2 fw-bold">Region: </div>
+                <div class="col-10">${country.region}</div>
+              </div>
+            </div>
+          </div>`;
+          document.querySelector("#select-country")
             .insertAdjacentHTML("beforeend", html);
         }
       }
 
-      displayCountry("france");
+      function borderCountry(data){
+        console.log(data);
+        document.querySelector("#border-country").innerHTML = "";
+        for (let country of data) {
+          const html = `
+          <div class="col">
+          <div class="card bg-dark">
+                          <img src="${country.flags.png}" alt="" class="border-img img-fluid rounded m-2">
+                          <p class="text-center h5 text-light mt-2">${country.name.common}</p>
+                        </div>
+                        </div>`;
+          document.querySelector("#border-country")
+            .insertAdjacentHTML("beforeend", html);
+        }
+      }
+
     </script>
   </body>
 </html>
+
+
+

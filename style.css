@@ -1,0 +1,22 @@
+body{
+   
+}
+
+.navbar .navbar-brand{
+    font-size: 1.5em;
+    color: green;
+}
+
+.card .card-header {
+    background-color: #e3f2fd;
+    font-size: 1.2em;
+    color: green;
+
+}
+
+
+
+.border-img {
+    height: 120px;
+ 
+}
