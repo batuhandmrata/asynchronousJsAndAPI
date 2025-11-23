@@ -14,7 +14,7 @@
   </head>
   <body class="bg-dark">
     <div class="container mt-3 border rounded">
-      <nav class="navbar bg-dark border-bottom border-body mb-3"  style="background-color: #e3f2fd;" data-bs-theme="light">
+      <nav class="navbar border-bottom border-body mb-3"  style="background-color: #e3f2fd;" data-bs-theme="light">
       <div class="container-fluid d-flex align-items-center justify-content-center">
         <a class="navbar-brand" >Country</a>
         <form class="d-flex flex-grow-1" role="search">
@@ -24,7 +24,7 @@
       </div>
     </nav>
       <div class="card">
-        <div class="card-header bg-dark">
+        <div class="card-header navbar">
           The country you wrote.
         </div>
         <div class="card-body" id="select-country">
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="card mt-3 mb-3">
-        <div class="card-header bg-dark">
+        <div class="card-header navbar">
           Border Countries.
         </div>
         <div class="card-body">
@@ -43,10 +43,12 @@
     </div>
 
     <script>
+      
       const btn = document.querySelector("button");
       
 
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
         const value = document.querySelector("input").value;
         displayCountry(value);})
 
@@ -117,7 +119,7 @@
         for (let country of data) {
           const html = `
           <div class="col">
-          <div class="card bg-dark">
+          <div class="card bg-card">
                           <img src="${country.flags.png}" alt="" class="border-img img-fluid rounded m-2">
                           <p class="text-center h5 text-light mt-2">${country.name.common}</p>
                         </div>

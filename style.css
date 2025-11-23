@@ -1,17 +1,35 @@
-body{
-   
-}
-
 .navbar .navbar-brand{
     font-size: 1.5em;
-    color: green;
+    color: #553d36;
+    font-weight: 900;
+}
+.navbar{
+    background-color: #87a0b2 
+    !important;
 }
 
-.card .card-header {
-    background-color: #e3f2fd;
-    font-size: 1.2em;
-    color: green;
+.btn-outline-success{
+    background-color: #553d36;
+    color: #87a0b2;
+    border-color: #553d36;
+}
+.btn-outline-success:hover{
+    background-color: #87a0b2;
+    color: #553d36 ;
+    border-color: #553d36;
+}
 
+
+.card .card-header {
+    
+    font-size: 1.2em;
+    color: #553d36;
+    font-weight: 900;
+
+}
+
+.container{
+    background-color: #684a52;
 }
 
 
@@ -19,4 +37,18 @@ body{
 .border-img {
     height: 120px;
  
+}
+
+.bg-dark{
+     background-color: #857885 !important;
+}
+
+.text-light {
+    color: #553d36 !important;
+    font-weight: 900;
+
+}
+
+.bg-card{
+    background-color: #857885;
 }
