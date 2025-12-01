@@ -52,3 +52,7 @@
 .bg-card{
     background-color: #857885;
 }
+
+.border-card:hover {
+    cursor: pointer;
+}

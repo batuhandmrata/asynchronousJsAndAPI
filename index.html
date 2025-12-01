@@ -144,7 +144,7 @@
         for (let country of data) {
           const html = `
           <div class="col">
-          <div class="card bg-card">
+          <div class="card bg-card border-card" data-country="${country.name.common}">
                           <img src="${country.flags.png}" alt="" class="border-img img-fluid rounded m-2">
                           <p class="text-center h5 text-light mt-2">${country.name.common}</p>
                         </div>
@@ -153,7 +153,15 @@
             .querySelector("#border-country")
             .insertAdjacentHTML("beforeend", html);
         }
+        document.querySelectorAll(".border-card").forEach(card => {
+        card.addEventListener("click", () => {
+            const countryName = card.getAttribute("data-country");
+            displayCountry(countryName);
+            document.querySelector("input").value =countryName;
+          });
+      });
       }
+
     </script>
   </body>
 </html>
