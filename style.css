@@ -1,58 +1,59 @@
-.navbar .navbar-brand{
-    font-size: 1.5em;
-    color: #553d36;
-    font-weight: 900;
+.navbar .navbar-brand {
+  font-size: 1.5em;
+  color: #553d36;
+  font-weight: 900;
 }
-.navbar{
-    background-color: #87a0b2 
-    !important;
-}
-
-.btn-outline-success{
-    background-color: #553d36;
-    color: #87a0b2;
-    border-color: #553d36;
-}
-.btn-outline-success:hover{
-    background-color: #87a0b2;
-    color: #553d36 ;
-    border-color: #553d36;
+.navbar {
+  background-color: #87a0b2 !important;
 }
 
+.btn-outline-success {
+  background-color: #553d36;
+  color: #87a0b2;
+  border-color: #553d36;
+}
+.btn-outline-success:hover {
+  background-color: #87a0b2;
+  color: #553d36;
+  border-color: #553d36;
+}
 
 .card .card-header {
-    
-    font-size: 1.2em;
-    color: #553d36;
-    font-weight: 900;
-
+  font-size: 1.2em;
+  color: #553d36;
+  font-weight: 900;
 }
 
-.container{
-    background-color: #684a52;
+.container {
+  background-color: #684a52;
 }
-
-
 
 .border-img {
-    height: 120px;
- 
+  height: 120px;
 }
 
-.bg-dark{
-     background-color: #857885 !important;
+.bg-dark {
+  background-color: #857885 !important;
 }
 
 .text-light {
-    color: #553d36 !important;
-    font-weight: 900;
-
+  /* color: #553d36 !important; */
+  color: white;
+  font-weight: 900;
 }
 
-.bg-card{
-    background-color: #857885;
+.bg-card {
+  background-color: #857885;
 }
 
-.border-card:hover {
-    cursor: pointer;
+.border-card:hover,
+.country-list-card:hover {
+  cursor: pointer;
+}
+
+.list-name {
+  height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

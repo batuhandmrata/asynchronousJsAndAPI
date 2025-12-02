@@ -9,6 +9,7 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css" />
     <title>Border Of Country</title>
   </head>
@@ -22,12 +23,12 @@
         <div
           class="container-fluid d-flex align-items-center justify-content-center"
         >
-          <a class="navbar-brand">Country</a>
+          <a class="navbar-brand">Search Country</a>
           <form class="d-flex flex-grow-1" role="search">
             <input
               class="form-control"
               type="search"
-              placeholder="Please write the name of the country you are curious about :)"
+              placeholder="The name of the country you are curious about :)"
               aria-label="Search"
             />
             <button class="btn btn-outline-success" type="submit">
@@ -37,18 +38,28 @@
         </div>
       </nav>
       <div class="card">
-        <div class="card-header navbar">The country you wrote.</div>
+        <div class="card-header navbar">The Selected & Searched Country</div>
         <div class="card-body" id="select-country"></div>
       </div>
       <div class="card mt-3 mb-3">
-        <div class="card-header navbar">Border Countries.</div>
+        <div class="card-header navbar">Border Countries</div>
         <div class="card-body">
           <div class="row row-cols-6 g-2" id="border-country"></div>
+        </div>
+      </div>
+      <div class="card mt-3 mb-3">
+        <div class="card-header navbar">Country List</div>
+        <div class="card-body">
+          <div class="row row-cols-6 g-2" id="country-list-item"></div>
         </div>
       </div>
     </div>
 
     <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        countryList();
+      });
+
       const btn = document.querySelector("button");
 
       btn.addEventListener("click", (e) => {
@@ -57,21 +68,50 @@
         displayCountry(value);
       });
 
-      function displayCountry(country) {
+      function countryList(country) {
+        document.querySelector("#country-list-item").innerHTML = "";
+        fetch("https://restcountries.com/v3.1/independent?status=true")
+          .then((response) => response.json())
+          .then((data) => {
+            for (let country of data) {
+              const html = `
+          <div class="col">
+          <div class="card bg-card country-list-card" name="${country.name.common}" >
+                          <p class="text-center h5 mb-0 text-light list-name">${country.name.common}</p>
+                        </div>
+                        </div>`;
+              document
+                .querySelector("#country-list-item")
+                .insertAdjacentHTML("beforeend", html);
+            }
 
+            document.querySelectorAll(".country-list-card").forEach((card) => {
+              card.addEventListener("click", () => {
+                const countryName = card.getAttribute("name");
+                displayCountry(countryName);
+                document.querySelector("input").value = "";
+                globalThis.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+              });
+            });
+          });
+      }
+
+      function displayCountry(country) {
         // promise & fetch
 
         fetch("https://restcountries.com/v3.1/name/" + country)
-        .then((response) => response.json())
-        .then((data) => {
-          setCountry(data);
-          const countries = data[0].borders.toString();
+          .then((response) => response.json())
+          .then((data) => {
+            setCountry(data);
+            const countries = data[0].borders.toString();
+            console.log(data[0]);
+            return fetch(
+              "https://restcountries.com/v3.1/alpha?codes=" + countries
+            );
+          })
+          .then((response) => response.json())
+          .then((data) => borderCountry(data));
 
-          return fetch("https://restcountries.com/v3.1/alpha?codes=" + countries);
-        })
-        .then(response => response.json())
-        .then((data) => borderCountry(data));
-        
         // callback
 
         // const request = new XMLHttpRequest();
@@ -113,22 +153,32 @@
               <h3 class="card-title fw-bold">${country.name.common}</h3>
               <hr>
               <div class="row">
-                <div class="col-2 fw-bold">Population: </div>
-                <div class="col-10">${(country.population / 1000000).toFixed(
-                  1
-                )} Milyon</div>
+                <div class="col-2 fw-bold">Population : </div>
+                <div class="col-3">${(country.population / 1000000).toFixed(
+                  3
+                )} Million</div>
+                <div class="col-2 fw-bold">Currency : </div>
+                <div class="col-5">${Object.values(data[0].currencies)[0].name} (${Object.values(data[0].currencies)[0].symbol})</div>
               </div>
               <div class="row">
-                <div class="col-2 fw-bold">Capital: </div>
-                <div class="col-10">${country.capital[0]}</div>
+                <div class="col-2 fw-bold">Capital : </div>
+                <div class="col-3">${country.capital[0]}</div>
+                <div class="col-2 fw-bold">Time Zones : </div>
+                <div class="col-5">${country.timezones[0]}</div>
               </div>
               <div class="row">
-                <div class="col-2 fw-bold">Language: </div>
-                <div class="col-10">${Object.values(country.languages)}</div>
+                <div class="col-2 fw-bold">Language : </div>
+                <div class="col-3">${Object.values(country.languages)}</div>
+                <div class="col-2 fw-bold"></div>
+                <div class="col-5"></div>
               </div>
               <div class="row">
-                <div class="col-2 fw-bold">Region: </div>
-                <div class="col-10">${country.region}</div>
+                <div class="col-2 fw-bold">Region : </div>
+                <div class="col-3">${country.region}</div>
+                 <div class="col-2 fw-bold">Map : </div>
+                <div class="col-5"><a href="${country.maps.googleMaps}" class="btn btn-outline-success" target="_blank">
+                    <i class="bi bi-globe-europe-africa"></i>
+                  </a></div>
               </div>
             </div>
           </div>`;
@@ -139,7 +189,6 @@
       }
 
       function borderCountry(data) {
-        console.log(data);
         document.querySelector("#border-country").innerHTML = "";
         for (let country of data) {
           const html = `
@@ -153,15 +202,14 @@
             .querySelector("#border-country")
             .insertAdjacentHTML("beforeend", html);
         }
-        document.querySelectorAll(".border-card").forEach(card => {
-        card.addEventListener("click", () => {
+        document.querySelectorAll(".border-card").forEach((card) => {
+          card.addEventListener("click", () => {
             const countryName = card.getAttribute("data-country");
             displayCountry(countryName);
-            document.querySelector("input").value =countryName;
+            document.querySelector("input").value = "";
           });
-      });
+        });
       }
-
     </script>
   </body>
 </html>
