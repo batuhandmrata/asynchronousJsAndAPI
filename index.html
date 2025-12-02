@@ -15,6 +15,7 @@
   </head>
   <body class="bg-dark">
     <div class="container mt-3 border rounded">
+      <div id="errors"></div>
       <nav
         class="navbar border-bottom border-body mb-3 mt-3 rounded"
         style="background-color: #e3f2fd"
@@ -100,17 +101,30 @@
         // promise & fetch
 
         fetch("https://restcountries.com/v3.1/name/" + country)
-          .then((response) => response.json())
+          .then((response) => {
+            if(!response.ok)
+              throw new Error("Error : Country not found. Try Again !");
+            return response.json();
+          })
           .then((data) => {
             setCountry(data);
-            const countries = data[0].borders.toString();
-            console.log(data[0]);
+            const countries = data[0].borders;
+            if(!countries) 
+              throw new Error("This country has no land borders.")
             return fetch(
-              "https://restcountries.com/v3.1/alpha?codes=" + countries
+              "https://restcountries.com/v3.1/alpha?codes=" + countries.toString()
             );
           })
           .then((response) => response.json())
-          .then((data) => borderCountry(data));
+          .then((data) => borderCountry(data))
+          .catch((err) => {
+            const errorMessage = err.message;
+            if(errorMessage =="Error : Country not found. Try Again !"){
+              renderError(err);
+            }else{
+              renderError2(err)
+            }
+          });
 
         // callback
 
@@ -143,7 +157,7 @@
       function setCountry(data) {
         document.querySelector("#select-country").innerHTML = "";
         for (let country of data) {
-          const html = `<div class="row">
+          const html = `<div class="row mb-3">
             <div class="col-4">
               <img src="${
                 country.flags.png
@@ -210,6 +224,38 @@
           });
         });
       }
+    
+      function renderError(err){
+        document.querySelector("#select-country").innerHTML = "";
+        document.querySelector("#border-country").innerHTML = ""; 
+        
+        const html = `
+        <div class="alert alert-danger mt-3">
+          ${err.message}
+        </div>
+        `;
+        setTimeout(() => {
+          document.getElementById("errors").innerHTML = "";
+        }, 5000);
+        document.getElementById("errors").innerHTML = html;
+      }
+      
+      function renderError2(err){
+       
+        document.querySelector("#border-country").innerHTML = ""; 
+        
+        const html = `
+        <div class="alert alert-warning mt-3">
+          ${err.message}
+        </div>
+        `;
+        setTimeout(() => {
+          document.getElementById("errors").innerHTML = "";
+        }, 5000);
+        document.getElementById("errors").innerHTML = html;
+      }
     </script>
   </body>
 </html>
+
+
