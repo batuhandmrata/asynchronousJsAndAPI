@@ -67,6 +67,8 @@
               document
                 .querySelector("#country-list-item")
                 .insertAdjacentHTML("beforeend", html);
+                const lastItem = document.querySelector("#country-list-item > div:last-child");
+                lastItem.classList.add("fade-in");
             }
 
             document.querySelectorAll(".country-list-card").forEach((card) => {
@@ -92,7 +94,7 @@
               throw new Error("Error : Country not found. Try Again !");
           const data = await response.json();
           setCountry(data);
-
+          triggerCardAnimation();
           const countries = data[0].borders;
           if(!countries) 
               throw new Error("This country has no land borders.")
@@ -294,4 +296,11 @@
 
       function hideLoading() {
         document.getElementById("loading").classList.replace("d-block", "d-none");
+      }
+
+      function triggerCardAnimation() {
+        const card = document.getElementById("selectedCard");
+        card.classList.remove("animate");
+        void card.offsetWidth;
+        card.classList.add("animate");
       }
