@@ -1,0 +1,223 @@
+document.addEventListener("DOMContentLoaded", function () {
+        countryList();
+      });
+
+      const btn = document.querySelector("button");
+
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const value = document.querySelector("input").value;
+        displayCountry(value);
+      });
+
+      function countryList(country) {
+        document.querySelector("#country-list-item").innerHTML = "";
+        fetch("https://restcountries.com/v3.1/independent?status=true")
+          .then((response) => response.json())
+          .then((data) => {
+            for (let country of data) {
+              const html = `
+          <div class="col">
+          <div class="card bg-card country-list-card" name="${country.name.common}" >
+                          <p class="text-center h5 mb-0 text-light list-name">${country.name.common}</p>
+                        </div>
+                        </div>`;
+              document
+                .querySelector("#country-list-item")
+                .insertAdjacentHTML("beforeend", html);
+            }
+
+            document.querySelectorAll(".country-list-card").forEach((card) => {
+              card.addEventListener("click", () => {
+                const countryName = card.getAttribute("name");
+                displayCountry(countryName);
+                document.querySelector("input").value = "";
+                globalThis.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+              });
+            });
+          });
+      }
+
+      function displayCountry(country) {
+        // promise & fetch
+        showLoading();
+        fetch("https://restcountries.com/v3.1/name/" + country + "?fullText=true")
+          .then((response) => {
+            if(!response.ok)
+              throw new Error("Error : Country not found. Try Again !");
+            return response.json();
+          })
+          .then((data) => {
+            setCountry(data);
+            const countries = data[0].borders;
+            if(!countries) 
+              throw new Error("This country has no land borders.")
+            return fetch(
+              "https://restcountries.com/v3.1/alpha?codes=" + countries.toString()
+            );
+          })
+          .then((response) => response.json())
+          .then((data) => borderCountry(data))
+          .catch((err) => {
+            const errorMessage = err.message;
+            if(errorMessage =="Error : Country not found. Try Again !"){
+              renderError(err);
+            }else{
+              renderError2(err)
+            }
+          })
+          .finally(() => {
+            hideLoading();
+          });
+
+        // callback
+
+        // const request = new XMLHttpRequest();
+
+        // request.open("GET", "https://restcountries.com/v3.1/name/" + country);
+        // request.send();
+
+        // request.onload = function () {
+        //   console.log(JSON.parse(this.responseText));
+        //   const data = JSON.parse(this.responseText);
+        //   setCountry(data);
+
+        //   console.log(data[0].borders.toString());
+        //   const countries = data[0].borders.toString();
+        //   const req = new XMLHttpRequest();
+        //   req.open(
+        //     "GET",
+        //     "https://restcountries.com/v3.1/alpha?codes=" + countries
+        //   );
+        //   req.send();
+        //   req.onload = function () {
+        //     const data = JSON.parse(this.responseText);
+        //     console.log(data);
+        //     borderCountry(data);
+        //   };
+        // };
+      }
+
+      function setCountry(data) {
+        const selectCard = document.getElementById("selectedCard");
+        selectCard.classList.replace("d-none","d-block");
+        const borderCard = document.getElementById("borderCard");
+        borderCard.classList.replace("d-block","d-none");
+
+
+        document.querySelector("#select-country").innerHTML = "";
+        for (let country of data) {
+          const html = `<div class="row mb-3">
+            <div class="col-4">
+              <img src="${
+                country.flags.png
+              }" alt="" class="img-fluid rounded border">
+            </div>
+            <div class="col-8">
+              <h3 class="card-title fw-bold">${country.name.common}</h3>
+              <hr>
+              <div class="row">
+                <div class="col-2 fw-bold">Population : </div>
+                <div class="col-3">${(country.population / 1000000).toFixed(
+                  3
+                )} Million</div>
+                <div class="col-2 fw-bold">Currency : </div>
+                <div class="col-5">${Object.values(data[0].currencies)[0].name} (${Object.values(data[0].currencies)[0].symbol})</div>
+              </div>
+              <div class="row">
+                <div class="col-2 fw-bold">Capital : </div>
+                <div class="col-3">${country.capital[0]}</div>
+                <div class="col-2 fw-bold">Time Zones : </div>
+                <div class="col-5">${country.timezones[0]}</div>
+              </div>
+              <div class="row">
+                <div class="col-2 fw-bold">Language : </div>
+                <div class="col-3">${Object.values(country.languages)}</div>
+                <div class="col-2 fw-bold"></div>
+                <div class="col-5"></div>
+              </div>
+              <div class="row">
+                <div class="col-2 fw-bold">Region : </div>
+                <div class="col-3">${country.region}</div>
+                 <div class="col-2 fw-bold">Map : </div>
+                <div class="col-5"><a href="${country.maps.googleMaps}" class="btn btn-outline-success" target="_blank">
+                    <i class="bi bi-globe-europe-africa"></i>
+                  </a></div>
+              </div>
+            </div>
+          </div>`;
+          document
+            .querySelector("#select-country")
+            .insertAdjacentHTML("beforeend", html);
+        }
+      }
+
+      function borderCountry(data) {
+        const borderCard = document.getElementById("borderCard");
+        borderCard.classList.replace("d-none","d-block");
+
+        document.querySelector("#border-country").innerHTML = "";
+        for (let country of data) {
+          const html = `
+          <div class="col">
+          <div class="card bg-card border-card" data-country="${country.name.common}">
+                          <img src="${country.flags.png}" alt="" class="border-img img-fluid rounded m-2">
+                          <p class="text-center h5 text-light mt-2">${country.name.common}</p>
+                        </div>
+                        </div>`;
+          document
+            .querySelector("#border-country")
+            .insertAdjacentHTML("beforeend", html);
+        }
+        document.querySelectorAll(".border-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            const countryName = card.getAttribute("data-country");
+            displayCountry(countryName);
+            document.querySelector("input").value = "";
+          });
+        });
+      }
+    
+      function renderError(err){
+        document.querySelector("#select-country").innerHTML = "";
+        document.querySelector("#border-country").innerHTML = "";
+        const selectCard = document.getElementById("selectedCard");
+        selectCard.classList.replace("d-block","d-none");
+        const borderCard = document.getElementById("borderCard");
+        borderCard.classList.replace("d-block","d-none");
+        
+
+        const html = `
+        <div class="alert alert-danger mt-3">
+          ${err.message}
+        </div>
+        `;
+        setTimeout(() => {
+          document.getElementById("errors").innerHTML = "";
+        }, 5000);
+        document.getElementById("errors").innerHTML = html;
+      }
+      
+      function renderError2(err){
+       
+
+      document.querySelector("#border-country").innerHTML = ""; 
+        
+        const html = `
+        <div class="alert alert-warning mt-3">
+          ${err.message}
+        </div>
+        `;
+        setTimeout(() => {
+          document.getElementById("errors").innerHTML = "";
+        }, 5000);
+        document.getElementById("errors").innerHTML = html;
+      }
+    
+      function showLoading() {
+        document.getElementById("loading").classList.replace("d-none", "d-block");
+       }
+
+      function hideLoading() {
+        document.getElementById("loading").classList.replace("d-block", "d-none");
+      }
