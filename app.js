@@ -101,6 +101,7 @@
           const response2 = await fetch("https://restcountries.com/v3.1/alpha?codes=" + countries.toString());
           const neighbors = await response2.json();
           borderCountry(neighbors);
+          globalThis.scrollTo({ top: 0, left: 0, behavior: "smooth" });
         } catch (err) {
           const errorMessage = err.message;
             if(errorMessage =="Error : Country not found. Try Again !"){
@@ -227,6 +228,7 @@
       }
 
       function borderCountry(data) {
+        
         const borderCard = document.getElementById("borderCard");
         borderCard.classList.replace("d-none","d-block");
 
@@ -250,7 +252,7 @@
             document.querySelector("input").value = "";
           });
         });
-        
+          
           triggerCardAnimationBD();
       }
     
