@@ -77,8 +77,10 @@
                 globalThis.scrollTo({ top: 0, left: 0, behavior: "smooth" });
               });
             });
+          })
+          .finally(() => {
+            hideLoading(); 
           });
-          hideLoading();
       }
 
       async function displayCountry(country) {
