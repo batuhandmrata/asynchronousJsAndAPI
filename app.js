@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", function () {
         countryList();
       });
 
@@ -38,39 +38,68 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
 
-      function displayCountry(country) {
-        // promise & fetch
+      async function displayCountry(country) {
+        // -----------------------------------------------------------async & await ---------------------------------------------------------------
         showLoading();
-        fetch("https://restcountries.com/v3.1/name/" + country + "?fullText=true")
-          .then((response) => {
-            if(!response.ok)
+        try {
+          const response = await fetch("https://restcountries.com/v3.1/name/" + country + "?fullText=true");
+          if(!response.ok)
               throw new Error("Error : Country not found. Try Again !");
-            return response.json();
-          })
-          .then((data) => {
-            setCountry(data);
-            const countries = data[0].borders;
-            if(!countries) 
+          const data = await response.json();
+          setCountry(data);
+
+          const countries = data[0].borders;
+          if(!countries) 
               throw new Error("This country has no land borders.")
-            return fetch(
-              "https://restcountries.com/v3.1/alpha?codes=" + countries.toString()
-            );
-          })
-          .then((response) => response.json())
-          .then((data) => borderCountry(data))
-          .catch((err) => {
-            const errorMessage = err.message;
+          
+          const response2 = await fetch("https://restcountries.com/v3.1/alpha?codes=" + countries.toString());
+          const neighbors = await response2.json();
+          borderCountry(neighbors);
+
+        } catch (err) {
+          const errorMessage = err.message;
             if(errorMessage =="Error : Country not found. Try Again !"){
               renderError(err);
             }else{
               renderError2(err)
             }
-          })
-          .finally(() => {
-            hideLoading();
-          });
+        }  finally {
+              hideLoading();
+            }
 
-        // callback
+
+        // -------------------------------------------------------promise & fetch------------------------------------------------------------------
+        // showLoading();
+        // fetch("https://restcountries.com/v3.1/name/" + country + "?fullText=true")
+        //   .then((response) => {
+        //     if(!response.ok)
+        //       throw new Error("Error : Country not found. Try Again !");
+        //     return response.json();
+        //   })
+        //   .then((data) => {
+        //     setCountry(data);
+        //     const countries = data[0].borders;
+        //     if(!countries) 
+        //       throw new Error("This country has no land borders.")
+        //     return fetch(
+        //       "https://restcountries.com/v3.1/alpha?codes=" + countries.toString()
+        //     );
+        //   })
+        //   .then((response) => response.json())
+        //   .then((data) => borderCountry(data))
+        //   .catch((err) => {
+        //     const errorMessage = err.message;
+        //     if(errorMessage =="Error : Country not found. Try Again !"){
+        //       renderError(err);
+        //     }else{
+        //       renderError2(err)
+        //     }
+        //   })
+        //   .finally(() => {
+        //     hideLoading();
+        //   });
+
+        // -----------------------------------------------------------callback-------------------------------------------------------
 
         // const request = new XMLHttpRequest();
 
