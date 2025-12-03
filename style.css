@@ -94,3 +94,11 @@
     transform: translateY(0);
   }
 }
+
+
+@media (max-width: 1200px){
+  .selected-country{
+    margin-bottom : 1rem;
+    text-align: center;
+  }
+}
