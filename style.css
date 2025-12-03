@@ -102,3 +102,15 @@
     text-align: center;
   }
 }
+
+@media (max-width: 520px){
+  .navbar .navbar-brand{
+   font-size: 3rem!important;
+  }
+}
+
+@media (max-width: 412px){
+  .selected-country .row{
+    padding: 0px !important;
+  }
+}

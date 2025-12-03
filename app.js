@@ -187,34 +187,34 @@
                 country.flags.png
               }" alt="" class="img-fluid rounded border">
             </div>
-            <div class="col-12 col-xl-8">
+            <div class="col-12 col-xl-8 text-start">
               <h3 class="card-title fw-bold">${country.name.common}</h3>
               <hr>
               <div class="row">
-                <div class="col-xl-2 col-lg-2 col-3 fw-bold">Population : </div>
-                <div class="col-xl-3 col-lg-4 col-9">${(country.population / 1000000).toFixed(
+                <div class="col-xl-2 col-lg-2 col-md-3 col-5 fw-bold">Population : </div>
+                <div class="col-xl-3 col-lg-4 col-md-9 col-7 ">${(country.population / 1000000).toFixed(
                   3
                 )} Million</div>
-                <div class="col-xl-2 col-lg-2 col-3 fw-bold">Currency : </div>
-                <div class="col-xl-5 col-lg-4 col-9">${Object.values(data[0].currencies)[0].name} (${Object.values(data[0].currencies)[0].symbol})</div>
+                <div class="col-xl-2 col-lg-2 col-md-3 col-5 fw-bold">Currency : </div>
+                <div class="col-xl-5 col-lg-4 col-7">${Object.values(data[0].currencies)[0].name} (${Object.values(data[0].currencies)[0].symbol})</div>
               </div>
               <div class="row">
-                <div class="col-xl-2 col-lg-2 col-3 fw-bold">Capital : </div>
-                <div class="col-xl-3 col-lg-4 col-9">${country.capital[0]}</div>
-                <div class="col-xl-2 col-lg-2 col-3  fw-bold">Time Zones : </div>
-                <div class="col-xl-5 col-lg-4 col-9">${country.timezones[0]}</div>
+                <div class="col-xl-2 col-lg-2 col-md-3 col-5 fw-bold">Capital : </div>
+                <div class="col-xl-3 col-lg-4 col-md-9 col-7">${country.capital[0]}</div>
+                <div class="col-xl-2 col-lg-2 col-md-3 col-5  fw-bold">Time Zones : </div>
+                <div class="col-xl-5 col-lg-4 col-md-9 col-7">${country.timezones[0]}</div>
               </div>
               <div class="row">
-                <div class="col-xl-2 col-lg-2 col-3 fw-bold">Language : </div>
-                <div class="col-xl-3 col-lg-4 col-9">${Object.values(country.languages)}</div>
-                <div class="col-xl-2 col-lg-2 col-3 fw-bold"></div>
-                <div class="col-xl-5 col-lg-4 col-9"></div>
+                <div class="col-xl-2 col-lg-2 col-md-3 col-5 fw-bold">Language : </div>
+                <div class="col-xl-3 col-lg-4 col-md-9 col-7">${Object.values(country.languages)}</div>
+                <div class="col-xl-2 col-lg-2 col-md-3 col-5 fw-bold"></div>
+                <div class="col-xl-5 col-lg-4 col-md-9 col-7"></div>
               </div>
               <div class="row">
-                <div class="col-xl-2 col-lg-2 col-3 fw-bold">Region : </div>
-                <div class="col-xl-3 col-lg-4 col-9">${country.region}</div>
-                 <div class="col-xl-2 col-lg-2 col-3 fw-bold">Map : </div>
-                <div class="col-xl-5 col-lg-4 col-9"><a href="${country.maps.googleMaps}" class="btn btn-outline-success" target="_blank">
+                <div class="col-xl-2 col-lg-2 col-md-3 col-5 fw-bold">Region : </div>
+                <div class="col-xl-3 col-lg-4 col-md-9 col-7">${country.region}</div>
+                 <div class="col-xl-2 col-lg-2 col-md-3 col-5 fw-bold">Map : </div>
+                <div class="col-xl-5 col-lg-4 col-md-9 col-7"><a href="${country.maps.googleMaps}" class="btn btn-outline-success" target="_blank">
                     <i class="bi bi-globe-europe-africa"></i>
                   </a></div>
               </div>
