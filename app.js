@@ -2,13 +2,54 @@
         countryList();
       });
 
-      const btn = document.querySelector("button");
+      const btn = document.querySelector(".btn-outline-success");
 
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         const value = document.querySelector("input").value;
         displayCountry(value);
       });
+
+      document.querySelector("#btnLocation").addEventListener("click", ()=>{
+        if(navigator.geolocation){
+          navigator.geolocation.getCurrentPosition(onSuccess, onError);
+          throw new Error();
+        }
+      })
+
+      function onError(err){
+        showLoading();
+        document.querySelector("#select-country").innerHTML = "";
+        document.querySelector("#border-country").innerHTML = "";
+        const selectCard = document.getElementById("selectedCard");
+        selectCard.classList.replace("d-block","d-none");
+        const borderCard = document.getElementById("borderCard");
+        borderCard.classList.replace("d-block","d-none");
+        
+
+        const html = `
+        <div class="alert alert-danger mt-3">
+          Unable to access your location. Please allow location permission and try again !
+        </div>
+        `;
+        setTimeout(() => {
+          document.getElementById("errors").innerHTML = "";
+        }, 4000);
+        document.getElementById("errors").innerHTML = html;
+        hideLoading();
+      }
+
+      async function onSuccess(position){
+        showLoading();
+        let lat = position.coords.latitude;
+        let lng = position.coords.longitude;
+
+        const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}%2C+${lng}&key=15bf9e757ba8444da412ab2884f617d3&language=en`);
+        const data = await response.json();
+        const country = data.results[0].components.country;
+        displayCountry(country);
+        hideLoading();
+      }
 
       function countryList(country) {
         document.querySelector("#country-list-item").innerHTML = "";
@@ -223,7 +264,7 @@
         `;
         setTimeout(() => {
           document.getElementById("errors").innerHTML = "";
-        }, 5000);
+        }, 3000);
         document.getElementById("errors").innerHTML = html;
       }
       
@@ -239,7 +280,7 @@
         `;
         setTimeout(() => {
           document.getElementById("errors").innerHTML = "";
-        }, 5000);
+        }, 3000);
         document.getElementById("errors").innerHTML = html;
       }
     
