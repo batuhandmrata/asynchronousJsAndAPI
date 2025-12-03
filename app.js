@@ -98,11 +98,9 @@
           const countries = data[0].borders;
           if(!countries) 
               throw new Error("This country has no land borders.")
-          
           const response2 = await fetch("https://restcountries.com/v3.1/alpha?codes=" + countries.toString());
           const neighbors = await response2.json();
           borderCountry(neighbors);
-
         } catch (err) {
           const errorMessage = err.message;
             if(errorMessage =="Error : Country not found. Try Again !"){
@@ -252,6 +250,8 @@
             document.querySelector("input").value = "";
           });
         });
+        
+          triggerCardAnimationBD();
       }
     
       function renderError(err){
@@ -300,7 +300,17 @@
 
       function triggerCardAnimation() {
         const card = document.getElementById("selectedCard");
+        const borderCard = document.getElementById("borderCard");
+        borderCard.classList.remove("animate");
         card.classList.remove("animate");
         void card.offsetWidth;
         card.classList.add("animate");
+        borderCard.classList.add("animate");
+      }
+
+      function triggerCardAnimationBD() {
+        const borderCard = document.getElementById("borderCard");
+        borderCard.classList.remove("animate");
+        void borderCard.offsetWidth;
+        borderCard.classList.add("animate");
       }
